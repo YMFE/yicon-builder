@@ -1,0 +1,31 @@
+.global-content-menu{
+  width: 216px;
+  background-color: #f9fafe;
+  overflow-X:hidden;
+  overflow-Y:auto;
+  min-height: 620px;
+  // max-height: 620px;
+  padding:10px 0 0;
+  li {
+    height: 50px;
+    line-height: 50px;
+    font-size:14px;
+    color: #344562;
+    cursor: pointer;
+    > a {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+      padding:0 34px;
+      color: #344562;
+    }
+  }
+  li:hover,li.selected{
+    background-color: #657289;
+    color: #fff;
+    a,a:hover{
+      color:#fff;
+    }
+  }
+}

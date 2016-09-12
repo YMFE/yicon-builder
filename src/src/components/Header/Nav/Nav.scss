@@ -1,0 +1,59 @@
+$mainColor:#3bbaff;
+.global-header-Nav {
+  height: 62px;
+  line-height: 62px;
+  float: left;
+  margin: 0 15px;
+  padding: 0 14px;
+  position: relative;
+  cursor: pointer;
+  a {
+    color: #fff;
+  }
+
+
+  .quick-menu-sub {
+    z-index: 1009;
+    border-top: 2px solid $mainColor;
+    background-color: #000c15;
+    width: 140px;
+    font-size: 14px;
+    position: absolute;
+    left: -5px;
+    top: 64px;
+    margin-top: -2px;
+    padding: 10px 0 20px;
+    border-radius: 0 0 3px 3px;
+    overflow: hidden;
+    display: none;
+    li {
+      line-height: 36px;
+    }
+    li:hover {
+      a {
+        color: $mainColor;
+      }
+    }
+    .current {
+      a {
+        color: $mainColor;
+      }
+    }
+  }
+  &.hover {
+
+    > a {
+      color: $mainColor;
+    }
+
+    .quick-menu-sub {
+      display: block;
+    }
+  }
+
+  &.current {
+    a {
+      color: $mainColor;
+    }
+  }
+}

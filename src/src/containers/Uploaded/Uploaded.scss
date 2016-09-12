@@ -1,0 +1,52 @@
+.uploaded{
+  $imgUrl: '../../../static/images/';
+  $text-grey: #9e9e9e;
+  .empty-container>.content{
+    min-height: 586px;
+    &::after{
+      content: '您还没有上传过图标哦';
+      height: 40px;
+      width: 191px;
+      display: block;
+      margin: 166px auto 0;
+      background: url(#{$imgUrl}noMatchIcon.png) 0 -386px no-repeat ;
+      padding-top: 200px;
+      font-size: 16px;
+      color: $text-grey;
+      text-align: center;
+    }
+  }
+  .global-timeline{
+    padding-top: 30px;
+    background-image: linear-gradient(90deg,transparent,transparent 116px,#dddfe2,#dddfe2 117px,transparent,transparent 0);
+    dl{
+      .description{
+        width: 116px;
+        padding-right: 15px;
+      }
+    }
+    .content{
+      padding-left: 40px;
+    }
+    dd .detail{
+      margin: -15px 0 0 -40px;
+      .icon-container{
+        margin-bottom: 8px;
+        padding: 0;
+        height: auto;
+      }
+      &-icon{
+        margin: 0 39px 20px;
+        width: 58px;
+        .name{
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          margin: 0 -20px;
+        }
+      }
+    }
+  }
+  .context{
+    width: 100%;
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "yicon-builder",
+  "version": "1.0.0",
+  "description": "The build of yicon",
+  "main": "index.js",
+  "bin": "./bin/yicon",
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.corp.qunar.com:mfe/yicon-builder.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "minghao.yu",
+  "license": "ISC",
+  "dependencies": {
+    "co": "^4.6.0",
+    "co-prompt": "^1.0.0",
+    "commander": "^2.9.0",
+    "mysql": "^2.11.1",
+    "q": "^1.4.1",
+    "sequelize": "^3.24.3"
+  }
+}

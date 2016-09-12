@@ -1,0 +1,9 @@
+@import "./Timeline.mixin";
+.global-timeline{
+  @include timeline;
+}
+.log{
+  .detail-icon{
+    width: 84px;
+  }
+}

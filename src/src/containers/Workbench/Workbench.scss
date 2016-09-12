@@ -1,0 +1,73 @@
+.yicon-upload-container {
+  background: #fff;
+  width: 1080px;
+  margin: 30px auto;
+  .upload-submit {
+    padding: 0 36px;
+    background: #f9fafe;
+    height: 110px;
+    .upload-submit-tips {
+      float: right;
+      line-height: 36px;
+      font-size: 12px;
+      color: #ff7171;
+    }
+    .upload-submit-setting {
+      float: right;
+      color: #616161;
+      .submit-info {
+        line-height: 38px;
+        font-size: 16px;
+        .icon-num {
+          color: #ff7171;
+        }
+      }
+      .select-repository {
+        display: inline-block;
+        vertical-align: middle;
+        height: 36px;
+        border: 1px solid #dfdfdf;
+        border-right: 0;
+        background: #fff;
+        margin-left: 16px;
+        .select-input {
+          margin-left: 10px;
+          line-height: 36px;
+          font-size: 14px;
+          outline: none;
+          border: 0;
+        }
+        .select-repository-icon {
+          color: #b3b8c4;
+        }
+        .rc-select {
+          line-height: 36px;
+          font-size: 14px;
+          outline: none;
+          border: 0;
+          width: 150px;
+          height: 36px;
+        }
+      }
+      .submit-btn {
+        width: 150px;
+        height: 38px;
+        line-height: 38px;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        border: 0;
+        border-radius: 2px;
+        color: #fff;
+        background: #008ed6;
+      }
+      .disabled {
+        color: #fff;
+        background: #e8e8e8;
+      }
+    }
+  }
+  .setting-opt {
+    margin-bottom: 40px;
+  }
+}

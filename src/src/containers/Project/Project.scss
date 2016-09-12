@@ -1,0 +1,46 @@
+.Project{
+  .global-subtitle{
+    .container{
+      width: 1080px;
+    }
+    .options{
+      display: flex;
+      .slider{
+        width: 220px;
+      }
+      .title{
+        flex: 1;
+      }
+    }
+  }
+  .global-content-Main{
+    flex-direction: column;
+    padding-bottom: 50px;
+  }
+  &-info{
+    padding: 20px 40px;
+    >header{
+      h3{
+        font-size: 30px;
+        color: #344562;
+        text-align: left;
+        line-height: 40px;
+      }
+    }
+    .tool{
+      padding: 15px 0 24px;
+      overflow: hidden;
+      border-bottom: 1px solid #d8d9d9;
+    }
+  }
+  // .icon-detail-item{
+  //   .info{
+  //     border: 1px solid #fff;
+  //   }
+  //   &.active,&:hover{
+  //     .info{
+  //       border: 1px solid #ccc;
+  //     }
+  //   }
+  // }
+}

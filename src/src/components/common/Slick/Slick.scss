@@ -1,0 +1,116 @@
+.upload-icon {
+  .upload-icon-list-area{
+    width: 1008px;
+    overflow: hidden;
+    display: inline;
+    float: left;
+  }
+  .upload-icon-list {
+    position: relative;
+    float: left;
+    // width: 1008px;
+    white-space: nowrap;
+    height: 76px;
+    overflow: hidden;
+    .upload-icon-item, .upload-icon-btn {
+      cursor: pointer;
+      float: left;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      width: 72px;
+      height: 72px;
+      border-radius: 6px;
+      border: 2px solid #eef1f3;
+      color: #555f6e;
+      margin: 0 4px;
+      .Icon {
+        margin-top: 6px;
+      }
+      .pass-tag, .no-pass-tag {
+        position: relative;
+        top: -23px;
+        left: 17px;
+        background: #4bb052;
+        color: #fff;
+        font-size: 12px;
+        line-height: 16px;
+        height: 16px;
+        transform: rotate(315deg);
+        -ms-transform: rotate(315deg);		/* IE 9 */
+        -webkit-transform: rotate(315deg);	/* Safari and Chrome */
+        -o-transform: rotate(315deg);		/* Opera */
+        -moz-transform: rotate(315deg);
+      }
+      .no-pass-tag {
+        background: #ff7474;
+      }
+      .delete {
+        display: none;
+        font-size: 14px;
+        line-height: 14px;
+        position: absolute;
+        right: 1px;
+        top: 1px;
+        cursor: pointer;
+        color: #555f6e;
+      }
+    }
+    .upload-icon-item:hover {
+      border: 2px solid #bfe2f4;
+      .delete {
+        display: block;
+      }
+    }
+    .upload-icon-item.done {
+      background: #eef1f3;
+    }
+    .upload-icon-item.done:hover {
+      border: 2px solid #bfe2f4;
+    }
+    .upload-icon-item.on {
+      border: 2px solid #bfe2f4;
+      background: #fff;
+      .delete {
+        display: none;
+      }
+    }
+    .upload-icon-item.on:hover {
+      .delete {
+        display: block;
+      }
+    }
+    .upload-icon-btn {
+      position: absolute;
+      right: 0;
+      background: #fff;
+      .upload-btn-icon {
+        font-size: 32px;
+        margin-top: 12px;
+      }
+      .upload-btn-txt {
+        line-height: 12px;
+        font-size: 14px;
+      }
+    }
+  }
+  .icons-more-btn {
+    float: left;
+    width: 36px;
+    height: 76px;
+    line-height: 76px;
+    text-align: center;
+    color: #fff;
+    background: #e8e8e8;
+    border: 0;
+    .icons-more-btn-icon {
+      font-size: 16px;
+    }
+  }
+  .icons-more-btn-right {
+    float: right;
+  }
+  .icons-more-btn:hover {
+    background: #008ed6;
+  }
+}
