@@ -11,14 +11,20 @@ iconfont 字体站部署平台
 - npm 3.x
 - mysql 5.0+
 
+npm 应该升级到 3.x，升级方式为：
+
+```
+$ sudo npm install -g npm@3 --registry=https://registry.npm.taobao.org
+```
+
 应该提前配置好 mysql 的服务，创建一个用户及其登录密码（可参考[这篇文章](http://www.cyberciti.biz/faq/mysql-change-root-password/)），并在里面创建一个 `utf-8` 编码的数据库。数据库名字、用户名、密码应和下面配置项中的名字保持一致。
 
 ## 初始安装
 
-使用离线安装的方式，找到我们的压缩包 `yicon-builder.zip`，运行命令：
+使用离线安装的方式，找到我们的压缩包 `yicon-builder.tar.gz`，运行命令：
 
 ```
-npm install yicon-builder.zip -g
+$ sudo npm install yicon-builder.tar.gz -g
 ```
 
 安装完成之后，会在拥有一个 `yicon` 的命令。运行 `yicon init`，可以按照提示进行安装：

@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-const dbLog = fs.readFileSync('../../config');
+const dbLog = fs.readFileSync(path.join(__dirname, '../../config.json'));
 const logPath = path.join(__dirname, '../../logs/log');
 
 const common = {
