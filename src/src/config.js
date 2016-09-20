@@ -1,6 +1,4 @@
 import path from 'path';
-import fs from 'fs';
-const dbLog = fs.readFileSync(path.join(__dirname, '../../config.json'));
 const logPath = path.join(__dirname, '../../logs/log');
 
 const common = {
@@ -10,18 +8,106 @@ const common = {
     svg: 'download/svg',
     png: 'download/png',
   },
+  login: {
+    ssoType: 'sso',
+    authUrl: 'https://qsso.corp.qunar.com/login.php?ret={{service}}',
+    tokenUrl: 'http://qsso.corp.qunar.com/api/verifytoken.php?token={{token}}',
+  },
 };
 
-let data = {};
-
-try {
-  data = JSON.parse(dbLog);
-} catch (e) {}
-
 const env = {
+  development: {
+    model: {
+      database: 'iconfont-dev',
+      username: 'root',
+      password: 'odmMj7H6x2IaACrs',
+      dialect: 'mysql',
+      port: '3306',
+      host: '10.90.184.130',
+    },
+    port: 3000,
+    log: {
+      appenders: [
+        { category: 'normal', type: 'console' },
+      ],
+    },
+  },
+  // 开发机
+  dev: {
+    model: {
+      database: 'iconfont-dev',
+      username: 'root',
+      password: 'odmMj7H6x2IaACrs',
+      dialect: 'mysql',
+      port: '3306',
+      host: '10.86.43.48',
+    },
+    port: 3000,
+    log: {
+      appenders: [
+        {
+          category: 'normal',
+          type: 'dateFile',
+          filename: logPath,
+          alwaysIncludePattern: true,
+          pattern: '-yyyy-MM-dd.log',
+        },
+      ],
+    },
+  },
+  // beta 机器
+  beta: {
+    model: {
+      database: 'iconfont',
+      username: 'root',
+      password: 'odmMj7H6x2IaACrs',
+      dialect: 'mysql',
+      port: '3306',
+      host: '10.90.184.130',
+    },
+    port: 3000,
+    log: {
+      appenders: [
+        {
+          category: 'normal',
+          type: 'dateFile',
+          filename: logPath,
+          alwaysIncludePattern: true,
+          pattern: '-yyyy-MM-dd.log',
+        },
+      ],
+    },
+  },
   // 线上机器
   production: {
-    ...data,
+    // 暂时写这个
+    model: {
+      database: 'iconfont',
+      username: 'root',
+      password: 'odmMj7H6x2IaACrs',
+      dialect: 'mysql',
+      port: '3306',
+      host: '10.90.59.56',
+    },
+    port: 3000,
+    log: {
+      appenders: [
+        {
+          category: 'normal',
+          type: 'dateFile',
+          filename: logPath,
+          alwaysIncludePattern: true,
+          pattern: '-yyyy-MM-dd.log',
+        },
+      ],
+    },
+    watcher: {
+      prefix: 'yicon',
+      host: 'qmon-fe.corp.qunar.com',
+      port: 2013,
+      category: 's.fe.',
+      rate: 1,
+    },
   },
 };
 

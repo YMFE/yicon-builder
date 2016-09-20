@@ -1,1 +1,0 @@
-PHANTOMJS_CDNURL=https://npm.taobao.org/dist/phantomjs SASS_BINARY_SITE=https://npm.taobao.org/mirrors/node-sass sudo npm install --registry=https://registry.npm.taobao.org

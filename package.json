@@ -1,5 +1,5 @@
 {
-  "name": "yicon-builder",
+  "name": "yicon",
   "version": "1.0.0",
   "description": "The build of yicon",
   "main": "index.js",
@@ -9,12 +9,12 @@
     "url": "git@gitlab.corp.qunar.com:mfe/yicon-builder.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel es6 -d lib -w"
   },
   "author": "minghao.yu",
   "license": "ISC",
   "dependencies": {
-    "co": "^4.6.0",
+    "chalk": "^1.1.3",
     "co-prompt": "^1.0.0",
     "commander": "^2.9.0",
     "mysql": "^2.11.1",

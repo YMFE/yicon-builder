@@ -1,3 +1,6 @@
+logs/
+logs
+
 # kdiff3 ignore
 *.orig
 
@@ -17,12 +20,10 @@ target/
 
 # temp ignore
 *.log
-*.log.*
 *.cache
 *.diff
 *.patch
 *.tmp
-logs/
 
 # system ignore
 .DS_Store
@@ -35,12 +36,5 @@ Thumbs.db
 # *.tar
 # *.tar.gz
 
-# iOS
-ios/build/
-
-# ignore public
-public/
-
-# ignore deploy files
-node_modules/
-lib/
+# ignore sensitive
+sensitive/

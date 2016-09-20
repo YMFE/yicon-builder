@@ -24,8 +24,17 @@ $ sudo npm install -g npm@3 --registry=https://registry.npm.taobao.org
 使用离线安装的方式，找到我们的压缩包 `yicon-builder.tar.gz`，运行命令：
 
 ```
-$ sudo npm install yicon-builder.tar.gz -g
+$ npm install yicon-builder.tar.gz -g
 ```
+
+也可以使用 `npm link` 的方式：
+
+```
+$ tar xvf yicon-builder.tar.gz
+$ cd yicon-builder-zip
+$ npm link
+```
+
 
 安装完成之后，会在拥有一个 `yicon` 的命令。运行 `yicon init`，可以按照提示进行安装：
 
@@ -38,8 +47,6 @@ $ sudo npm install yicon-builder.tar.gz -g
 ├── logs
 └── src
 ```
-
-安装路径为**绝对路径**，应确保安装路径**存在且为空**。
 
 ### 提示：输入数据库配置项
 
@@ -55,8 +62,12 @@ $ sudo npm install yicon-builder.tar.gz -g
 
 ## 依赖安装
 
-初始安装成功后，会提示需要进入到安装路径的 src 路径下执行 `./preinstall.sh` 进行依赖安装。
+初始安装成功后，会提示需要进入到安装路径的 src 路径下执行 `npm install` 进行依赖安装（请自行指定源）。
 
 ## 项目启动
 
 依赖安装完成后，进入到安装路径的 src 路径下执行 `./start.sh` 进行项目启动。
+
+**Tips**
+
+- 更换 Logo，请替换 `src/static/images/qiconbg.png`。
