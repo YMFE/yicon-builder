@@ -45,6 +45,7 @@ const log = {
 
 // 将 src 资源文件复制到指定目录
 const copySource = async () => {
+  await q.nfcall(exec, `rm -rf "${$install('/*')}"`)
   await q.nfcall(exec, `cp -r "${$command('../../src/')}" "${$install('/src')}"`);
   await q.nfcall(exec, `cp -r "${$command('../../src/.babelrc')}" "${$install('/src')}"`);
   await q.nfcall(exec, `cp -r "${$command('../../src/.npmrc')}" "${$install('/src')}"`);
@@ -138,13 +139,14 @@ const importDBData = async seq => {
     (def, sql) => def.then(() => seq.query(sql)),
     Promise.resolve()
   );
-  console.log(chalk.green('数据导入成功'));
+  console.log(log.done('数据导入成功'));
 };
 
 const npmPreInstall = async () => {
   log.info('选择 npm 源或直接输入指定的源，如：https://registry.npm.taobao.org');
   const source = await readParam('npm 安装源【npm/taobao/qnpm】', 'taobao');
-  const params = ['install'];
+  const params = ['install', '--no-optional'];
+  console.log(params);
 
   const sourceMap = {
     npm: '',
@@ -184,8 +186,7 @@ export default async () => {
   try {
     const installPath = await prompt('请输入安装路径: ');
     dir = mixDirPath(installPath);
-    console.log(chalk.dim(正在初始化项目...'));
-
+    console.log(chalk.dim('正在初始化项目...'));
     await copySource();
 
     const config = getConfig($install('/logs/log'));

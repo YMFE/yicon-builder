@@ -68,6 +68,16 @@ $ npm link
 
 依赖安装完成后，进入到安装路径的 src 路径下执行 `./start.sh` 进行项目启动。
 
+## 项目更新
+
+**删除之前安装的文件路径**，并删除全局命令 `yicon`
+
+```
+$ npm un -g yicon
+```
+
+然后重复上面安装的步骤即可。
+
 **Tips**
 
 - 更换 Logo，请替换 `src/static/images/qiconbg.png`。
