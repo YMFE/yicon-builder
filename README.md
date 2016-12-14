@@ -35,6 +35,11 @@ $ cd yicon-builder-zip
 $ npm link
 ```
 
+如果安装时依然遇到找不到文件的错误，可以直接尝试在安装包根目录下运行：
+
+```
+$ bin/yicon
+```
 
 安装完成之后，会在拥有一个 `yicon` 的命令。运行 `yicon init`，可以按照提示进行安装：
 

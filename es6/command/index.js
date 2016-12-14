@@ -1,1 +1,3 @@
-module.exports = require('./init');
+import init from './init';
+
+export { init }
