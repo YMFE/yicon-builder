@@ -1,7 +1,6 @@
 # YIcon - builder
-===
 
-iconfont 字体站部署平台
+如果希望在自己的服务器上搭建字体站，可以遵照如下的方式，一步一步进行部署即可。
 
 ## 环境要求
 
@@ -9,7 +8,7 @@ iconfont 字体站部署平台
 
 - node 4.x+
 - npm 3.x
-- mysql 5.0+
+- mysql 5.5+
 
 npm 应该升级到 3.x，升级方式为：
 
@@ -23,22 +22,8 @@ $ sudo npm install -g npm@3 --registry=https://registry.npm.taobao.org
 
 使用离线安装的方式，找到我们的压缩包 `yicon-builder.tar.gz`，运行命令：
 
-```
-$ npm install yicon-builder.tar.gz -g
-```
-
-也可以使用 `npm link` 的方式：
-
-```
-$ tar xvf yicon-builder.tar.gz
-$ cd yicon-builder-zip
-$ npm link
-```
-
-如果安装时依然遇到找不到文件的错误，可以直接尝试在安装包根目录下运行：
-
-```
-$ bin/yicon
+```bash
+$ npm install yicon-builder -g
 ```
 
 安装完成之后，会在拥有一个 `yicon` 的命令。运行 `yicon init`，可以按照提示进行安装：
@@ -71,7 +56,7 @@ $ bin/yicon
 
 ## 项目启动
 
-依赖安装完成后，进入到安装路径的 src 路径下执行 `./start.sh` 进行项目启动。
+依赖安装完成后，进入到安装路径的 src 路径下执行 `./start.sh` 进行项目启动，或者自行选择使用 pm2 等工具进行启动。
 
 ## 项目更新
 

@@ -1,0 +1,5 @@
+.index img[alt=logo] {
+  background-color: #000c15;
+  padding: 10px;
+  border-radius: 10px;
+}
