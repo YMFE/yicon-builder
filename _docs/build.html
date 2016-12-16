@@ -213,9 +213,9 @@
 <h2 id="依赖安装">依赖安装</h2><p>初始安装成功后，会提示需要进入到安装路径的 src 路径下执行 <code>npm install</code> 进行依赖安装，目前只提供淘宝源，如果有自己指定的源，可以选择 <code>3) other</code>，然后手动输入源（如输入 <code>http://registry.npm.xxx.org</code>）。</p>
 <h2 id="项目编译">项目编译</h2><p>安装依赖完成之后，会在 <code>/src</code> 目录下执行 <code>npm run build</code> 进行静态资源编译；如果编译出错，可以去项目路径中手动执行 <code>npm run build</code> 编译。</p>
 <h2 id="项目启动">项目启动</h2><p>依赖安装完成后，进入到安装路径的 src 路径下执行 <code>./start.sh</code> 进行项目启动，或者自行选择使用 pm2 等工具进行启动。</p>
-<h2 id="项目更新">项目更新</h2><p><strong>删除之前安装的文件路径</strong>，并删除全局命令 <code>yicon</code></p>
-<pre><code>$ npm un -g yicon
-</code></pre><p>然后重复上面安装的步骤即可。</p>
+<h2 id="项目更新">项目更新</h2><p>在项目目录下运行</p>
+<pre><code>$ yicon update
+</code></pre><p>运行完成之后，会先分析当前项目的变动，可以手工先保存变动的文件。之后项目会拉取最新的代码，覆盖项目内部的 <code>/src</code> 目录，并重新安装依赖和编译。</p>
 <p><strong>Tips</strong></p>
 <ul>
 <li>更换 Logo，请替换 <code>src/static/images/qiconbg.png</code>。</li>
