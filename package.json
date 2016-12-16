@@ -19,7 +19,8 @@
   },
   "scripts": {
     "prepublish": "npm run build",
-    "build": "babel es6 -d lib -w"
+    "watch": "babel es6 -d lib -w",
+    "build": "babel es6 -d lib"
   },
   "author": "minghao.yu",
   "license": "ISC",
