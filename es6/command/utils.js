@@ -1,6 +1,10 @@
+import fs from 'fs';
 import chalk from 'chalk';
 import download from 'download';
 import BottomBar from 'inquirer/lib/ui/bottom-bar';
+import ProgressBar from 'progress';
+import inquirer from 'inquirer';
+import { spawn } from 'child_process';
 
 export function wget(repo, dest) {
   const url = github(normalize(repo));
@@ -67,4 +71,91 @@ export const log = {
   error: err => console.log(chalk.red(`× ${err}`)),
   info: msg => console.log(chalk.blue(`△ ${msg}`)),
   dim: msg => console.log(chalk.dim(`◎ ${msg}`))
+};
+
+const getChoiceItem = item => item.replace(/^\d+\) /, '');
+
+export const npmPreInstall = async (targetPath, logPath) => {
+  log.info('选择 npm 源或直接输入指定的源，如: https://registry.npm.taobao.org');
+  const questions = [
+    {
+      type: 'list',
+      message: '选择 npm 安装源',
+      name: 'src',
+      choices: ['1) npm', '2) taobao', '3) other']
+    },
+    {
+      type: 'input',
+      name: 'other',
+      message: '请输入指定的 npm 源:',
+      when: function (answers) {
+        return answers.src === '3) other';
+      }
+    },
+  ];
+  const { src, other } = await inquirer.prompt(questions);
+  const source = getChoiceItem(src);
+  const params = ['install', '--no-optional'];
+
+  const sourceMap = {
+    npm: '',
+    taobao: '--registry=https://registry.npm.taobao.org'
+  };
+
+  if (Object.keys(sourceMap).indexOf(source) !== -1) {
+    sourceMap[source] && params.push(sourceMap[source]);
+  } else {
+    const registry = other.trim();
+    registry && params.push(`--registry=${registry}`);
+  }
+
+  log.dim(`在 ${targetPath} 路径下执行命令: npm ${params.join(' ')}`);
+
+  await new Promise((resolve, reject) => {
+    const ls = spawn('npm', params, {
+      cwd: targetPath,
+    });
+
+    let num = 0;
+    const log = [];
+    const total = 37718;
+
+    const bar = new ProgressBar('依赖安装中 [:bar] :percent', {
+      total,
+      complete: chalk.cyan('='),
+      incomplete: chalk.dim('='),
+      width: 40
+    });
+
+    bar.tick(num);
+
+    ls.stdout.on('data', (data) => {
+      const ret = data.toString();
+      num += ret.length;
+      log.push('[INFO]  ' + ret);
+      bar.tick(num);
+    });
+
+    ls.stderr.on('data', (data) => {
+      let ret = data.toString();
+      num += ret.length;
+      log.push('[ERROR] ' + ret);
+      bar.tick(num);
+    });
+
+    ls.on('close', (code) => {
+      bar.tick(total);
+      if (!code) {
+        resolve()
+      } else {
+        fs.writeFileSync(logPath, log.join('\n'));
+        reject(new Error(`npm 依赖安装失败，安装日志已记录到 ${logPath}`));
+      }
+    });
+  });
+};
+
+export const buildProject = async (targetPath) => {
+  const cmd = spawn('npm', ['run', 'build'], { cwd: targetPath });
+  await loadingSpawn(cmd, '构建项目');
 };

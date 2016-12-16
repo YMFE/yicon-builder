@@ -3,11 +3,15 @@ import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
-import ProgressBar from 'progress';
 import Sequelize from 'sequelize';
-import { exec, spawn } from 'child_process';
+import { exec } from 'child_process';
 
-import { wget, log, loadingSpawn } from './utils';
+import {
+  wget,
+  log,
+  npmPreInstall,
+  buildProject
+} from './utils';
 
 const getConfig = filename => ({
   log: {
@@ -40,7 +44,7 @@ const $install = p => path.join(dir, p);
 const copySource = async () => {
   await q.nfcall(exec, `mkdir "${$install('/src')}"`);
   await wget('YMFE/yicon#deploy', $install('/src'));
-  await q.nfcall(exec, `mv -r "${$install('/src')}" "${$install('.src_prev')}"`);
+  await q.nfcall(exec, `cp -r "${$install('/src')}" "${$install('.src_prev')}"`);
   await q.nfcall(exec, `cp -r "${$command('../../template/config.js')}" "${$install('/src/src')}"`);
   await q.nfcall(exec, `cp -r "${$command('../../template/start.sh')}" "${$install('/src')}"`);
   await q.nfcall(exec, `mkdir "${$install('/logs')}"`);
@@ -170,86 +174,6 @@ const importDBData = async seq => {
   log.done('数据导入成功');
 };
 
-const npmPreInstall = async () => {
-  log.info('选择 npm 源或直接输入指定的源，如: https://registry.npm.taobao.org');
-  const questions = [
-    {
-      type: 'list',
-      message: '选择 npm 安装源',
-      name: 'src',
-      choices: ['1) npm', '2) taobao', '3) other']
-    },
-    {
-      type: 'input',
-      name: 'other',
-      message: '请输入指定的 npm 源:',
-      when: function (answers) {
-        return answers.src === '3) other';
-      }
-    },
-  ];
-  const { src, other } = await inquirer.prompt(questions);
-  const source = getChoiceItem(src);
-  const params = ['install', '--no-optional'];
-
-  const sourceMap = {
-    npm: '',
-    taobao: '--registry=https://registry.npm.taobao.org'
-  };
-
-  if (Object.keys(sourceMap).indexOf(source) !== -1) {
-    sourceMap[source] && params.push(sourceMap[source]);
-  } else {
-    const registry = other.trim();
-    registry && params.push(`--registry=${registry}`);
-  }
-
-  log.dim(`在 ${$install('/src')} 路径下执行命令: npm ${params.join(' ')}`);
-
-  await new Promise((resolve, reject) => {
-    const ls = spawn('npm', params, {
-      cwd: $install('/src'),
-    });
-
-    let num = 0;
-    const log = [];
-    const total = 37718;
-
-    const bar = new ProgressBar('依赖安装中 [:bar] :percent', {
-      total,
-      complete: chalk.cyan('='),
-      incomplete: chalk.dim('='),
-      width: 40
-    });
-
-    bar.tick(num);
-
-    ls.stdout.on('data', (data) => {
-      const ret = data.toString();
-      num += ret.length;
-      log.push('[INFO]  ' + ret);
-      bar.tick(num);
-    });
-
-    ls.stderr.on('data', (data) => {
-      let ret = data.toString();
-      num += ret.length;
-      log.push('[ERROR] ' + ret);
-      bar.tick(num);
-    });
-
-    ls.on('close', (code) => {
-      bar.tick(total);
-      if (!code) {
-        resolve()
-      } else {
-        fs.writeFileSync($install('/install.log'), log.join('\n'));
-        reject(new Error(`npm 依赖安装失败，安装日志已记录到 ${$install('/install.log')}`));
-      }
-    });
-  });
-};
-
 const getInstallPath = async () => {
   const { installPath } = await inquirer.prompt({
     type: 'input',
@@ -280,11 +204,6 @@ const getInstallPath = async () => {
   log.dim(`正在 ${$install('/')} 路径下初始化项目...`);
 };
 
-const buildProject = async () => {
-  const cmd = spawn('npm', ['run', 'build'], { cwd: $install('/src') });
-  await loadingSpawn(cmd, '构建项目');
-};
-
 export default async () => {
   try {
     await getInstallPath();
@@ -296,8 +215,8 @@ export default async () => {
     await writeConfigFile(config);
 
     await authDBConnection(config);
-    await npmPreInstall();
-    await buildProject();
+    await npmPreInstall($install('/src'), $install('/install.log'));
+    await buildProject($install('/src'));
 
     log.done(`项目初始化成功，可以前往 ${$install('/src')} 目录下执行 ./start.sh 以 3000 端口启动服务`);
     process.exit(0);
