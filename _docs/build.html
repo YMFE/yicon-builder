@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge, chrome=1">
   <meta name="description" content="description of your site">
   <meta name="author" content="author of the site">
-  <title>YIcon 部署</title>
+  <title>YIcon 部署工具</title>
   <link rel="stylesheet" href="source/main.css"/>
   
     
@@ -28,13 +28,19 @@
                     
                     <li class="">
                         
-                        <a href="index.html">站点</a>
+                        <a href="index.html">站点介绍</a>
                         
                     </li>
                     
                     <li class="active">
                         
-                        <a href="build.html">部署</a>
+                        <a href="build.html">部署工具</a>
+                        
+                    </li>
+                    
+                    <li class="">
+                        
+                        <a href="usage.html">使用说明</a>
                         
                     </li>
                     
@@ -80,14 +86,9 @@
 <pre><code>$ sudo npm install -g npm@3 --registry=https://registry.npm.taobao.org
 </code></pre><p>应该提前配置好 mysql 的服务，创建一个用户及其登录密码（可参考<a href="http://www.cyberciti.biz/faq/mysql-change-root-password/">这篇文章</a>），并在里面创建一个 <code>utf-8</code> 编码的数据库。数据库名字、用户名、密码应和下面配置项中的名字保持一致。</p>
 <h2 id="初始安装">初始安装</h2><p>使用离线安装的方式，找到我们的压缩包 <code>yicon-builder.tar.gz</code>，运行命令：</p>
-<pre><code>$ npm install yicon-builder.tar.gz -g
-</code></pre><p>也可以使用 <code>npm link</code> 的方式：</p>
-<pre><code>$ tar xvf yicon-builder.tar.gz
-$ cd yicon-builder-zip
-$ npm link
-</code></pre><p>如果安装时依然遇到找不到文件的错误，可以直接尝试在安装包根目录下运行：</p>
-<pre><code>$ bin/yicon
-</code></pre><p>安装完成之后，会在拥有一个 <code>yicon</code> 的命令。运行 <code>yicon init</code>，可以按照提示进行安装：</p>
+<pre><code class="lang-bash">$ npm install yicon-builder -g
+</code></pre>
+<p>安装完成之后，会在拥有一个 <code>yicon</code> 的命令。运行 <code>yicon init</code>，可以按照提示进行安装：</p>
 <h3 id="提示：输入安装路径">提示：输入安装路径</h3><p>这个是项目的安装路径，安装时会生成如下的目录结构：</p>
 <pre><code>├── config.json
 ├── logs
@@ -101,8 +102,33 @@ $ npm link
 <li>数据库名称，必须在设置之前创建并指定一个特定的数据库，推荐为默认值 <code>iconfont</code>；</li>
 </ol>
 <p>配置完成后将生成配置文件，并尝试连接数据库，如果连接期间存在问题，将无法自动导入数据表，安装程序会将创建数据表的 sql 文件置入安装路径中，需要稍后手动导入。</p>
-<h2 id="依赖安装">依赖安装</h2><p>初始安装成功后，会提示需要进入到安装路径的 src 路径下执行 <code>npm install</code> 进行依赖安装（请自行指定源）。</p>
-<h2 id="项目启动">项目启动</h2><p>依赖安装完成后，进入到安装路径的 src 路径下执行 <code>./start.sh</code> 进行项目启动。</p>
+<h3 id="提示：选择登陆类型">提示：选择登陆类型</h3><p>由于本应用没有接入第三方登录，因此依赖内部系统的 cas 或 sso 登录模式。应用内部已经支持这两种模式的配置，只需要提供相关 url 即可。</p>
+<p>在生成的配置文件中，我们会看到如下配置：</p>
+<pre><code class="lang-javascript">{
+    &quot;login&quot;: {
+        //
+        &quot;type&quot;: &quot;cas&quot;,
+        // authUrl:
+        &quot;authUrl&quot;: &quot;http://cas.example.com/cas/login?service={{service}}&quot;,
+        // tokenUrl: 登录
+        &quot;tokenUrl&quot;: &quot;http://cas.example.com/serviceValidate?service={{service}}&amp;ticket={{token}}&quot;,
+        &quot;serviceUrl&quot;: &quot;http://app.iconfont.com&quot;,
+        &quot;adminList&quot;: []
+    }
+}
+</code></pre>
+<p>这里面的配置项含义如下：</p>
+<ul>
+<li><code>type</code>: 根据用户输入自动生成登录类型，会分别按照 cas 和 sso 的规则进行登录；</li>
+<li><code>authUrl</code>: 指点击登录按钮时需要跳转的 url，通常是一个登录页面，用户在这个页面登录后，会给服务端返回一个 token；</li>
+<li><code>tokenUrl</code>: 服务端在获取 token 之后，可以通过这个 url 来获取用户的详细信息；</li>
+<li><code>serviceUrl</code>: 通常这两种服务都需要提供当前域名，这里可以配置 iconfont 字体站服务的域名；</li>
+<li><code>adminList</code>: 字符串格式的数组，里面可以写入超管的用户名，用于配置超管，如 <code>[&#39;minghao.yu&#39;]</code>。</li>
+</ul>
+<p>url 中的 <code>{{xxx}}</code> 格式表示占位符，其中 <code>{{service}}</code> 会被替换成 <code>serviceUrl</code>，<code>{{token}}</code> 会被替换成获取的 token。</p>
+<h2 id="依赖安装">依赖安装</h2><p>初始安装成功后，会提示需要进入到安装路径的 src 路径下执行 <code>npm install</code> 进行依赖安装，目前只提供淘宝源，如果有自己指定的源，可以选择 <code>3) other</code>，然后手动输入源（如输入 <code>http://registry.npm.xxx.org</code>）。</p>
+<h2 id="项目编译">项目编译</h2><p>安装依赖完成之后，会在 <code>/src</code> 目录下执行 <code>npm run build</code> 进行静态资源编译；如果编译出错，可以去项目路径中手动执行 <code>npm run build</code> 编译。</p>
+<h2 id="项目启动">项目启动</h2><p>依赖安装完成后，进入到安装路径的 src 路径下执行 <code>./start.sh</code> 进行项目启动，或者自行选择使用 pm2 等工具进行启动。</p>
 <h2 id="项目更新">项目更新</h2><p><strong>删除之前安装的文件路径</strong>，并删除全局命令 <code>yicon</code></p>
 <pre><code>$ npm un -g yicon
 </code></pre><p>然后重复上面安装的步骤即可。</p>

@@ -7,7 +7,7 @@ import ProgressBar from 'progress';
 import Sequelize from 'sequelize';
 import { exec, spawn } from 'child_process';
 
-import { sp, log } from './utils';
+import { wget, log, loadingSpawn } from './utils';
 
 const getConfig = filename => ({
   log: {
@@ -38,7 +38,8 @@ const $install = p => path.join(dir, p);
 
 // 将 src 资源文件复制到指定目录
 const copySource = async () => {
-  await sp('git', ['clone', '--progress', '-b', 'deploy', 'https://github.com/YMFE/yicon'], $install('/src'));
+  await q.nfcall(exec, `mkdir "${$install('/src')}"`);
+  await wget('YMFE/yicon#deploy', $install('/src'));
   await q.nfcall(exec, `cp -r "${$command('../../template/config.js')}" "${$install('/src/src')}"`);
   await q.nfcall(exec, `cp -r "${$command('../../template/start.sh')}" "${$install('/src')}"`);
   await q.nfcall(exec, `mkdir "${$install('/logs')}"`);
@@ -202,7 +203,7 @@ const npmPreInstall = async () => {
     registry && params.push(`--registry=${registry}`);
   }
 
-  log.dim(`在 ${$install('/src')} 路径下执行命令: npm ${params.join(' ')}...`);
+  log.dim(`在 ${$install('/src')} 路径下执行命令: npm ${params.join(' ')}`);
 
   await new Promise((resolve, reject) => {
     const ls = spawn('npm', params, {
@@ -213,14 +214,14 @@ const npmPreInstall = async () => {
     const log = [];
     const total = 37718;
 
-    const bar = new ProgressBar('依赖安装中 [:bar] :percent :elapsed', {
+    const bar = new ProgressBar('依赖安装中 [:bar] :percent', {
       total,
       complete: chalk.cyan('='),
       incomplete: chalk.dim('='),
       width: 40
     });
 
-    bar.tick(num)
+    bar.tick(num);
 
     ls.stdout.on('data', (data) => {
       const ret = data.toString();
@@ -274,8 +275,14 @@ const getInstallPath = async () => {
   if (dirContent.join('') !== '') {
     throw new Error(`请确保 ${$install('/')} 文件夹为空`)
   }
+
   log.dim(`正在 ${$install('/')} 路径下初始化项目...`);
-}
+};
+
+const buildProject = async () => {
+  const cmd = spawn('npm', ['run', 'build'], { cwd: $install('/src') });
+  await loadingSpawn(cmd, '构建项目');
+};
 
 export default async () => {
   try {
@@ -289,6 +296,7 @@ export default async () => {
 
     await authDBConnection(config);
     await npmPreInstall();
+    await buildProject();
 
     log.done(`项目初始化成功，可以前往 ${$install('/src')} 目录下执行 ./start.sh 以 3000 端口启动服务`);
     process.exit(0);
