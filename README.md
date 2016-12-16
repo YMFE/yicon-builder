@@ -60,7 +60,7 @@ $ npm install yicon-builder -g
 {
     "login": {
         //
-        "type": "cas",
+        "ssoType": "cas",
         // authUrl:
         "authUrl": "http://cas.example.com/cas/login?service={{service}}",
         // tokenUrl: 登录
