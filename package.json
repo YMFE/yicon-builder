@@ -1,5 +1,5 @@
 {
-  "name": "yicon",
+  "name": "yicon-builder",
   "version": "1.0.1",
   "description": "The builder of yicon",
   "files": [
@@ -10,7 +10,9 @@
     "template"
   ],
   "main": "index.js",
-  "bin": "./bin/yicon",
+  "bin": {
+    "yicon": "bin/yicon"
+  },
   "repository": {
     "type": "git",
     "url": "git@gitlab.corp.qunar.com:mfe/yicon-builder.git"
