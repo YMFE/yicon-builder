@@ -40,6 +40,7 @@ const $install = p => path.join(dir, p);
 const copySource = async () => {
   await q.nfcall(exec, `mkdir "${$install('/src')}"`);
   await wget('YMFE/yicon#deploy', $install('/src'));
+  await q.nfcall(exec, `mv -r "${$install('/src')}" "${$install('.src_prev')}"`);
   await q.nfcall(exec, `cp -r "${$command('../../template/config.js')}" "${$install('/src/src')}"`);
   await q.nfcall(exec, `cp -r "${$command('../../template/start.sh')}" "${$install('/src')}"`);
   await q.nfcall(exec, `mkdir "${$install('/logs')}"`);

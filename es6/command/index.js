@@ -1,3 +1,4 @@
 import init from './init';
+import update from './update';
 
-export { init }
+export { init, update }
