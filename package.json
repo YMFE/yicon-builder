@@ -1,6 +1,6 @@
 {
   "name": "yicon-builder",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "The builder of yicon",
   "files": [
     "*.md",
@@ -25,6 +25,7 @@
   "author": "minghao.yu",
   "license": "ISC",
   "dependencies": {
+    "babel-runtime": "^6.11.6",
     "chalk": "^1.1.3",
     "co-prompt": "^1.0.0",
     "commander": "^2.9.0",
@@ -41,7 +42,6 @@
     "babel-cli": "^6.14.0",
     "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-es2015": "^6.14.0",
-    "babel-preset-stage-3": "^6.11.0",
-    "babel-runtime": "^6.11.6"
+    "babel-preset-stage-3": "^6.11.0"
   }
 }
