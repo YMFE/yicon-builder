@@ -107,7 +107,7 @@ const getLoginConfig = async config => {
   const { type } = await inquirer.prompt(questions);
 
   config.login = {
-    type: getChoiceItem(type),
+    ssoType: getChoiceItem(type),
     authUrl: 'http://cas.example.com/cas/login?service={{service}}',
     tokenUrl: 'http://cas.example.com/serviceValidate?service={{service}}&ticket={{token}}',
     serviceUrl: 'http://app.iconfont.com',
@@ -123,8 +123,7 @@ const writeConfigFile = async config => {
 
   await q.nfcall(fs.writeFile, configFile, content);
 
-  log.dim(`您的数据库配置和日志配置如下，可以手工修改 ${chalk.yellow(configFile)} 来改变配置`);
-  log.dim(content);
+  log.dim(`您的数据库配置和日志配置已写入，可以手工修改 ${chalk.yellow(configFile)} 来改变配置`);
 };
 
 const authDBConnection = async config => {

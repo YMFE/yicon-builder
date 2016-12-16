@@ -133,18 +133,19 @@ export const npmPreInstall = async (targetPath, logPath) => {
       const ret = data.toString();
       num += ret.length;
       log.push('[INFO]  ' + ret);
-      bar.tick(num);
+      if (num <= total) bar.tick(ret.length);
     });
 
     ls.stderr.on('data', (data) => {
       let ret = data.toString();
       num += ret.length;
       log.push('[ERROR] ' + ret);
-      bar.tick(num);
+      if (num <= total) bar.tick(ret.length);
     });
 
     ls.on('close', (code) => {
-      bar.tick(total);
+      const gap = total - num;
+      if (gap > 0) bar.tick(gap);
       if (!code) {
         resolve()
       } else {
