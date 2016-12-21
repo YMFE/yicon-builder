@@ -190,11 +190,8 @@
 <p>在生成的配置文件中，我们会看到如下配置：</p>
 <pre><code class="lang-javascript">{
     &quot;login&quot;: {
-        //
         &quot;ssoType&quot;: &quot;cas&quot;,
-        // authUrl:
         &quot;authUrl&quot;: &quot;http://cas.example.com/cas/login?service={{service}}&quot;,
-        // tokenUrl: 登录
         &quot;tokenUrl&quot;: &quot;http://cas.example.com/serviceValidate?service={{service}}&amp;ticket={{token}}&quot;,
         &quot;serviceUrl&quot;: &quot;http://app.iconfont.com&quot;,
         &quot;adminList&quot;: []
@@ -203,7 +200,7 @@
 </code></pre>
 <p>这里面的配置项含义如下：</p>
 <ul>
-<li><code>type</code>: 根据用户输入自动生成登录类型，会分别按照 cas 和 sso 的规则进行登录；</li>
+<li><code>ssoType</code>: 根据用户输入自动生成登录类型，会分别按照 cas 和 sso 的规则进行登录；</li>
 <li><code>authUrl</code>: 指点击登录按钮时需要跳转的 url，通常是一个登录页面，用户在这个页面登录后，会给服务端返回一个 token；</li>
 <li><code>tokenUrl</code>: 服务端在获取 token 之后，可以通过这个 url 来获取用户的详细信息；</li>
 <li><code>serviceUrl</code>: 通常这两种服务都需要提供当前域名，这里可以配置 iconfont 字体站服务的域名；</li>
