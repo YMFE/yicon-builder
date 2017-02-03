@@ -2,15 +2,17 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <meta name="format-detection" content="telephone=no,email=no" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge, chrome=1">
   <meta name="description" content="description of your site">
   <meta name="author" content="author of the site">
   <title>YIcon 部署工具</title>
   <link rel="stylesheet" href="source/main.css"/>
   
+  
     
-<link rel="stylesheet" href="./theme/yicon.css"/>
+        <link rel="stylesheet" href="./theme/yicon.css"/>
     
   
 </head>
@@ -44,6 +46,12 @@
                         
                     </li>
                     
+                    <li class="">
+                        
+                        <a href="releases.html">版本记录</a>
+                        
+                    </li>
+                    
                 
               </ul>
             </nav>
@@ -66,100 +74,10 @@
       <div class="ydoc-container">
         
           
-          <div class="ydoc-container-content">
-              <div class="content-left" role="complementary">
-                  <nav class="docs-sidebar hidden-print hidden-xs hidden-sm">
-                    <ul class="nav docs-sidenav">
-                        
-                        
-                        <!-- <li  > -->
-                        <li >
-                            
-                            <a href="#环境要求">环境要求</a>
-                            
-                        </li>
-                        
-                        
-                        
-                        <!-- <li  > -->
-                        <li >
-                            
-                            <a href="#初始安装">初始安装</a>
-                            
-                        </li>
-                        
-                        
-                        
-                        
-                        <ul class="nav docs-sidenav-extend"  >
-                        
-                            <li >
-                                <a href="#提示：输入安装路径">提示：输入安装路径</a>
-                            </li>
-                        
-                        
-                        
-                        
-                        
-                            <li >
-                                <a href="#提示：输入数据库配置项">提示：输入数据库配置项</a>
-                            </li>
-                        
-                        
-                        
-                        
-                        
-                            <li >
-                                <a href="#提示：选择登陆类型">提示：选择登陆类型</a>
-                            </li>
-                        
-                        </ul>
-                        
-                        
-                        
-                        
-                        <!-- <li  > -->
-                        <li >
-                            
-                            <a href="#依赖安装">依赖安装</a>
-                            
-                        </li>
-                        
-                        
-                        
-                        <!-- <li  > -->
-                        <li >
-                            
-                            <a href="#项目编译">项目编译</a>
-                            
-                        </li>
-                        
-                        
-                        
-                        <!-- <li  > -->
-                        <li >
-                            
-                            <a href="#项目启动">项目启动</a>
-                            
-                        </li>
-                        
-                        
-                        
-                        <!-- <li  > -->
-                        <li >
-                            
-                            <a href="#项目更新">项目更新</a>
-                            
-                        </li>
-                        
-                        
-                    </ul>
-                  </nav>
-              </div>
-              <div class="content-right markdown-body" role="main">
-
-                
-                <h1 id="YIcon - builder">YIcon - builder</h1><p>如果希望在自己的服务器上搭建字体站，可以遵照如下的方式，一步一步进行部署即可。</p>
+          <div class="ydoc-container-content" id="readme">
+              <article class="markdown-body">
+                  
+                  <h1 id="YIcon - builder">YIcon - builder</h1><p>如果希望在自己的服务器上搭建字体站，可以遵照如下的方式，一步一步进行部署即可。</p>
 <h2 id="环境要求">环境要求</h2><p>环境要求：</p>
 <ul>
 <li>node 4.x+</li>
@@ -170,7 +88,7 @@
 <pre><code>$ sudo npm install -g npm@3 --registry=https://registry.npm.taobao.org
 </code></pre><p>应该提前配置好 mysql 的服务，创建一个用户及其登录密码（可参考<a href="http://www.cyberciti.biz/faq/mysql-change-root-password/">这篇文章</a>），并在里面创建一个 <code>utf-8</code> 编码的数据库。数据库名字、用户名、密码应和下面配置项中的名字保持一致。</p>
 <h2 id="初始安装">初始安装</h2><p>使用离线安装的方式，找到我们的压缩包 <code>yicon-builder.tar.gz</code>，运行命令：</p>
-<pre><code class="lang-bash">$ npm install yicon-builder -g
+<pre><code class="lang-bash">$ <span class="token function">npm</span> <span class="token function">install</span> yicon-builder -g
 </code></pre>
 <p>安装完成之后，会在拥有一个 <code>yicon</code> 的命令。运行 <code>yicon init</code>，可以按照提示进行安装：</p>
 <h3 id="提示：输入安装路径">提示：输入安装路径</h3><p>这个是项目的安装路径，安装时会生成如下的目录结构：</p>
@@ -188,15 +106,15 @@
 <p>配置完成后将生成配置文件，并尝试连接数据库，如果连接期间存在问题，将无法自动导入数据表，安装程序会将创建数据表的 sql 文件置入安装路径中，需要稍后手动导入。</p>
 <h3 id="提示：选择登陆类型">提示：选择登陆类型</h3><p>由于本应用没有接入第三方登录，因此依赖内部系统的 cas 或 sso 登录模式。应用内部已经支持这两种模式的配置，只需要提供相关 url 即可。</p>
 <p>在生成的配置文件中，我们会看到如下配置：</p>
-<pre><code class="lang-javascript">{
-    &quot;login&quot;: {
-        &quot;ssoType&quot;: &quot;cas&quot;,
-        &quot;authUrl&quot;: &quot;http://cas.example.com/cas/login?service={{service}}&quot;,
-        &quot;tokenUrl&quot;: &quot;http://cas.example.com/serviceValidate?service={{service}}&amp;ticket={{token}}&quot;,
-        &quot;serviceUrl&quot;: &quot;http://app.iconfont.com&quot;,
-        &quot;adminList&quot;: []
-    }
-}
+<pre><code class="lang-javascript"><span class="token punctuation">{</span>
+    <span class="token string">"login"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token string">"ssoType"</span><span class="token punctuation">:</span> <span class="token string">"cas"</span><span class="token punctuation">,</span>
+        <span class="token string">"authUrl"</span><span class="token punctuation">:</span> <span class="token string">"http://cas.example.com/cas/login?service={{service}}"</span><span class="token punctuation">,</span>
+        <span class="token string">"tokenUrl"</span><span class="token punctuation">:</span> <span class="token string">"http://cas.example.com/serviceValidate?service={{service}}&amp;ticket={{token}}"</span><span class="token punctuation">,</span>
+        <span class="token string">"serviceUrl"</span><span class="token punctuation">:</span> <span class="token string">"http://app.iconfont.com"</span><span class="token punctuation">,</span>
+        <span class="token string">"adminList"</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 </code></pre>
 <p>这里面的配置项含义如下：</p>
 <ul>
@@ -218,7 +136,7 @@
 <li>更换 Logo，请替换 <code>src/static/images/qiconbg.png</code>。</li>
 </ul>
 
-              </div>
+              </article>
           </div>
           
         
@@ -232,11 +150,18 @@
         </div>
       </footer>
     </div>
+
+    
+    
+
     <script src="source/main.js"></script>
     <script src="source/app.js"></script>
     
     
 
+    
+
+    
     
 
 </body>
