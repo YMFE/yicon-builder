@@ -6,6 +6,7 @@ program.version(pkg.version);
 
 program
   .command('init')
+  .arguments('[branch]')
   .description('初始化 yicon 项目，进行数据库、登录配置')
   .action(init);
 

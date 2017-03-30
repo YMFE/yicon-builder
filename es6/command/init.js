@@ -41,9 +41,10 @@ const $command = p => path.join(__dirname, p);
 const $install = p => path.join(dir, p);
 
 // 将 src 资源文件复制到指定目录
-const copySource = async () => {
+const copySource = async (branch) => {
+  const sourceUrl = `YMFE/yicon#${branch}`;
   await q.nfcall(exec, `mkdir "${$install('/src')}"`);
-  await wget('YMFE/yicon#deploy', $install('/src'));
+  await wget(sourceUrl, $install('/src'));
   await q.nfcall(exec, `cp -r "${$install('/src')}" "${$install('.src_prev')}"`);
   await q.nfcall(exec, `cp -r "${$command('../../template/config.js')}" "${$install('/src/src')}"`);
   await q.nfcall(exec, `cp -r "${$command('../../template/start.sh')}" "${$install('/src')}"`);
@@ -101,19 +102,42 @@ const getLoginConfig = async config => {
       type: 'list',
       message: '选择登录类型',
       name: 'type',
-      choices: ['1) sso', '2) cas']
+      choices: ['1) sso', '2) cas', '3) ldap']
     }
   ];
   const { type } = await inquirer.prompt(questions);
-
-  config.login = {
-    ssoType: getChoiceItem(type),
+  const ssoType = getChoiceItem(type);
+  const ssoCasConfig = {
     authUrl: 'http://cas.example.com/cas/login?service={{service}}',
     tokenUrl: 'http://cas.example.com/serviceValidate?service={{service}}&ticket={{token}}',
     serviceUrl: 'http://app.iconfont.com',
     adminList: [],
   };
+  const ldapConfig = {
+    server: 'ldap://127.0.0.1:1389',
+    bindDn: 'cn=root',
+    baseDn: 'test',
+    bindPassword: 'secret',
+    searchDn: 'cn=root'
+  };
+  config.login = { ssoType };
+  if (ssoType === 'ldap') {
+    Object.assign(config.login, ldapConfig);
+  } else {
+    Object.assign(config.login, ssoCasConfig);
+  }
 
+  return config;
+};
+
+const getSourceConfig = async config => {
+  config.source = {
+    support: false,
+    infoUrl: '',
+    versionUrl: '',
+    sourceUrl: '',
+    cdn: ''
+  };
   return config;
 };
 
@@ -203,14 +227,15 @@ const getInstallPath = async () => {
   log.dim(`正在 ${$install('/')} 路径下初始化项目...`);
 };
 
-export default async () => {
+export default async (branch = 'deploy') => {
   try {
     await getInstallPath();
-    await copySource();
+    await copySource(branch);
 
     const config = getConfig($install('/logs/log'));
     await getDBConfig(config);
     await getLoginConfig(config);
+    await getSourceConfig(config);
     await writeConfigFile(config);
 
     await authDBConnection(config);
