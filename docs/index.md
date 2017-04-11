@@ -17,3 +17,7 @@
 * ![艺龙](http://wx3.sinaimg.cn/small/c4b5f11bly1fegv0jylc0j203u01kdfp.jpg)
 
     艺龙已接入使用 YIcon 平台
+
+* ![便利蜂](images/bianlifeng.png)
+
+    便利蜂已接入使用 YIcon 平台
