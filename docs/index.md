@@ -25,3 +25,19 @@
 * ![香格里拉酒店集团](images/shangri-la.png)
 
     香格里拉酒店集团已接入使用 YIcon 平台
+
+* ![本木医疗](images/benmu.png)
+
+    香格里拉酒店集团已接入使用 YIcon 平台
+
+* ![百家互联（跟谁学）](images/genshuixue.png)
+
+    百家互联（跟谁学）已接入使用 YIcon 平台
+
+* ![Opera欧朋](images/opera.png)
+
+    Opera欧朋已接入使用 YIcon 平台
+
+* ![新浪微博](images/weibo.png)
+
+    新浪微博已接入使用 YIcon 平台
