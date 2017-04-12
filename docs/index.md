@@ -21,3 +21,7 @@
 * ![便利蜂](images/bianlifeng.png)
 
     便利蜂已接入使用 YIcon 平台
+
+* ![香格里拉酒店集团](images/shangri-la.png)
+
+    香格里拉酒店集团已接入使用 YIcon 平台
