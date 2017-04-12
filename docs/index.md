@@ -28,7 +28,7 @@
 
 * ![本木医疗](images/benmu.png)
 
-    香格里拉酒店集团已接入使用 YIcon 平台
+    本木医疗已接入使用 YIcon 平台
 
 * ![百家互联（跟谁学）](images/genshuixue.png)
 
