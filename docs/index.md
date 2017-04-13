@@ -41,3 +41,19 @@
 * ![新浪微博](images/weibo.png)
 
     新浪微博已接入使用 YIcon 平台
+
+* ![链家](images/lianjia.png)
+
+    链家已接入使用 YIcon 平台
+
+* ![36Kr](images/36kr.png)
+
+    36Kr已接入使用 YIcon 平台
+
+* ![Nestia](images/nestia.png)
+
+    Nestia已接入使用 YIcon 平台
+
+* ![BBAE](images/bbae.png)
+
+    BBAE已接入使用 YIcon 平台
