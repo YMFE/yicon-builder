@@ -1,6 +1,6 @@
 {
   "name": "yicon-builder",
-  "version": "1.0.3",
+  "version": "1.0.4-beta",
   "description": "The builder of yicon",
   "files": [
     "*.md",
