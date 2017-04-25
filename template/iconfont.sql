@@ -17,7 +17,7 @@ CREATE TABLE `icons` (
   `fontClass` varchar(255) DEFAULT NULL,
   `tags` varchar(2000) DEFAULT NULL,
   `code` int(11) DEFAULT NULL,
-  `path` varchar(5000) NOT NULL,
+  `path` varchar(7000) NOT NULL,
   `createTime` datetime NOT NULL,
   `applyTime` datetime DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT '0',

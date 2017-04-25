@@ -75,25 +75,34 @@ export const log = {
 
 const getChoiceItem = item => item.replace(/^\d+\) /, '');
 
-export const npmPreInstall = async (targetPath, logPath) => {
-  log.info('选择 npm 源或直接输入指定的源，如: https://registry.npm.taobao.org');
-  const questions = [
-    {
-      type: 'list',
-      message: '选择 npm 安装源',
-      name: 'src',
-      choices: ['1) npm', '2) taobao', '3) other']
-    },
-    {
-      type: 'input',
-      name: 'other',
-      message: '请输入指定的 npm 源:',
-      when: function (answers) {
-        return answers.src === '3) other';
-      }
-    },
-  ];
-  const { src, other } = await inquirer.prompt(questions);
+export const npmPreInstall = async (targetPath, logPath, isDefault) => {
+  let src = '',
+      other = '';
+  if (isDefault) {
+    log.info('默认从 taobao 的源（https://registry.npm.taobao.org）进行 npm install');
+    src = '2) taobao';
+  } else {
+    log.info('选择 npm 源或直接输入指定的源，如: https://registry.npm.taobao.org');
+    const questions = [
+      {
+        type: 'list',
+        message: '选择 npm 安装源',
+        name: 'src',
+        choices: ['1) npm', '2) taobao', '3) other']
+      },
+      {
+        type: 'input',
+        name: 'other',
+        message: '请输入指定的 npm 源:',
+        when: function (answers) {
+          return answers.src === '3) other';
+        }
+      },
+    ];
+    const data = await inquirer.prompt(questions);
+    src = data && data.src || '';
+    other = data && data.other || '';
+  }
   const source = getChoiceItem(src);
   const params = ['install', '--no-optional'];
 

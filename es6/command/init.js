@@ -53,7 +53,18 @@ const copySource = async (branch) => {
   log.done('项目初始化完成');
 };
 
-const getDBConfig = async config => {
+const getDBConfig = async (config, isDefault) => {
+  if (isDefault) {
+    config.model = {
+      host: '127.0.0.1',
+      username: 'root',
+      password: '123456',
+      port: '3306',
+      database: 'iconfont',
+      dialect: 'mysql'
+    };
+    return config;
+  }
   log.info('输入数据库配置项，回车接受默认值');
 
   const questions = [
@@ -96,17 +107,7 @@ const getDBConfig = async config => {
   return config;
 };
 
-const getLoginConfig = async config => {
-  const questions = [
-    {
-      type: 'list',
-      message: '选择登录类型',
-      name: 'type',
-      choices: ['1) sso', '2) cas', '3) ldap']
-    }
-  ];
-  const { type } = await inquirer.prompt(questions);
-  const ssoType = getChoiceItem(type);
+const getLoginConfig = async (config, isDefault) => {
   const ssoCasConfig = {
     authUrl: 'http://cas.example.com/cas/login?service={{service}}',
     tokenUrl: 'http://cas.example.com/serviceValidate?service={{service}}&ticket={{token}}',
@@ -120,6 +121,23 @@ const getLoginConfig = async config => {
     bindPassword: 'secret',
     searchDn: 'cn=root'
   };
+
+  if (isDefault) {
+    config.login = {};
+    Object.assign(config.login, { ssoType: 'sso' }, ssoCasConfig);
+    return config;
+  }
+
+  const questions = [
+    {
+      type: 'list',
+      message: '选择登录类型',
+      name: 'type',
+      choices: ['1) sso', '2) cas', '3) ldap']
+    }
+  ];
+  const { type } = await inquirer.prompt(questions);
+  const ssoType = getChoiceItem(type);
   config.login = { ssoType };
   if (ssoType === 'ldap') {
     Object.assign(config.login, ldapConfig);
@@ -197,17 +215,23 @@ const importDBData = async seq => {
   log.done('数据导入成功');
 };
 
-const getInstallPath = async () => {
-  const { installPath } = await inquirer.prompt({
-    type: 'input',
-    name: 'installPath',
-    message: '请输入安装路径:',
-    validate: function (value) {
-      if (value) return true;
-      return '安装路径不能为空';
-    }
-  });
-  dir = mixDirPath(installPath.trim());
+const getInstallPath = async (isDefault) => {
+  let _installPath = null;
+  if (!isDefault) {
+    const { installPath } = await inquirer.prompt({
+      type: 'input',
+      name: 'installPath',
+      message: '请输入安装路径:',
+      validate: function (value) {
+        if (value) return true;
+        return '安装路径不能为空';
+      }
+    });
+    _installPath = installPath;
+  } else {
+    _installPath = '.';
+  }
+  dir = mixDirPath(_installPath.trim());
 
   try {
     await q.nfcall(fs.access, dir, fs.F_OK);
@@ -227,19 +251,21 @@ const getInstallPath = async () => {
   log.dim(`正在 ${$install('/')} 路径下初始化项目...`);
 };
 
-export default async (branch = 'deploy') => {
+export default async (args) => {
   try {
-    await getInstallPath();
+    const { branch = 'deploy' } = args;
+    const isDefault = args && args.default;
+    await getInstallPath(isDefault);
     await copySource(branch);
 
     const config = getConfig($install('/logs/log'));
-    await getDBConfig(config);
-    await getLoginConfig(config);
+    await getDBConfig(config, isDefault);
+    await getLoginConfig(config, isDefault);
     await getSourceConfig(config);
     await writeConfigFile(config);
 
     await authDBConnection(config);
-    await npmPreInstall($install('/src'), $install('/install.log'));
+    await npmPreInstall($install('/src'), $install('/install.log'), isDefault);
     await buildProject($install('/src'));
 
     log.done(`项目初始化成功，可以前往 ${$install('/src')} 目录下执行 ./start.sh 以 3000 端口启动服务`);

@@ -6,7 +6,9 @@ program.version(pkg.version);
 
 program
   .command('init')
-  .arguments('[branch]')
+  // .arguments('[branch]')
+  .option('-d, --default', '默认配置')
+  .option('-b, --branch <branch>', '指定 yicon 初始化分支或tag')
   .description('初始化 yicon 项目，进行数据库、登录配置')
   .action(init);
 
