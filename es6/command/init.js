@@ -187,6 +187,7 @@ const authDBConnection = async config => {
         default: false
       }
     ]);
+    initDB = init;
 
     if (initDB) {
       await importDBData(seq);
