@@ -56,6 +56,7 @@ CREATE TABLE `projects` (
   `public` tinyint(1) DEFAULT '0',
   `baseline` tinyint(1) DEFAULT '0',
   `owner` int(11) DEFAULT NULL,
+  `source` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `projects_name_unique` (`name`),
