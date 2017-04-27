@@ -168,7 +168,7 @@ const writeConfigFile = async config => {
   log.dim(`您的数据库配置和日志配置已写入，可以手工修改 ${chalk.yellow(configFile)} 来改变配置`);
 };
 
-const authDBConnection = async config => {
+const authDBConnection = async (config, isDefault) => {
   const { host, username, password, port, database } = config.model;
   const seq = new Sequelize(database, username, password, {
     port, host, logging: false, dialectOptions: { multipleStatements: true },
@@ -179,15 +179,19 @@ const authDBConnection = async config => {
   try {
     await seq.authenticate();
     log.done('数据库连接成功');
-    const { init } = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'init',
-        message: '是否初始化数据库?',
-        default: false
-      }
-    ]);
-    initDB = init;
+    if (!isDefault) {
+      const { init } = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'init',
+          message: '是否初始化数据库?',
+          default: false
+        }
+      ]);
+      initDB = init;
+    } else {
+      initDB = true;
+    }
 
     if (initDB) {
       await importDBData(seq);
@@ -265,7 +269,7 @@ export default async (args) => {
     await getSourceConfig(config);
     await writeConfigFile(config);
 
-    await authDBConnection(config);
+    await authDBConnection(config, isDefault);
     await npmPreInstall($install('/src'), $install('/install.log'), isDefault);
     await buildProject($install('/src'));
 
