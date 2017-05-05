@@ -13,6 +13,7 @@
 - node 4.x+
 - npm 3.x
 - mysql 5.5+
+- fontconfig lib
 
 npm 应该升级到 3.x，升级方式为：
 
@@ -21,6 +22,23 @@ $ sudo npm install -g npm@3 --registry=https://registry.npm.taobao.org
 ```
 
 应该提前配置好 mysql 的服务，创建一个用户及其登录密码（可参考[这篇文章](http://www.cyberciti.biz/faq/mysql-change-root-password/)），并在里面创建一个 `utf-8` 编码的数据库。数据库名字、用户名、密码应和下面配置项中的名字保持一致。
+
+下载图标 png 图片依赖 fontconfig，安装方式：
+
+CentOS
+```
+$ yum install fontconfig
+```
+
+Ubuntu
+```
+$ apt-get install fontconfig
+```
+OS
+```
+$ sudo brew install fontconfig
+```
+其他系统请自行 Google 解决。
 
 ## 初始安装
 
