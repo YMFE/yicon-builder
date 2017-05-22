@@ -1,10 +1,15 @@
 import fs from 'fs';
+import path from 'path';
 import chalk from 'chalk';
 import download from 'download';
 import BottomBar from 'inquirer/lib/ui/bottom-bar';
 import ProgressBar from 'progress';
 import inquirer from 'inquirer';
 import { spawn } from 'child_process';
+import request from 'request';
+import diff from 'diff';
+
+const BASE_PATH = 'https://raw.githubusercontent.com/YMFE/yicon';
 
 export function wget(repo, dest) {
   const url = github(normalize(repo));
@@ -66,9 +71,28 @@ export function loadingSpawn(cmd, info) {
   });
 }
 
+export function loading(info) {
+    let i = 0;
+    const loader = [
+      '\u2807', '\u280B', '\u2819', '\u2838', '\u2834', '\u2826'
+    ].map(v => `${v} ${info}中...`);
+    const ui = new BottomBar({ bottomBar: loader[i] });
+    const clearId = setInterval(() => ui.updateBottomBar(loader[i++ % 6]), 300);
+    return {
+        close: () => {
+            clearInterval(clearId);
+            ui.updateBottomBar(chalk.green(`✓ ${info}成功!\n`));
+            ui.close();
+        }
+    };
+};
+
 export const log = {
   done: msg => console.log(chalk.green(`✓ ${msg}`)),
   error: err => console.log(chalk.red(`× ${err}`)),
+  add: msg => console.log(chalk.green(`+ ${msg}`)),
+  remove: err => console.log(chalk.red(`- ${err}`)),
+  warn: err => console.log(chalk.yellow(`△ ${err}`)),
   info: msg => console.log(chalk.blue(`△ ${msg}`)),
   dim: msg => console.log(chalk.dim(`◎ ${msg}`))
 };
@@ -168,4 +192,31 @@ export const npmPreInstall = async (targetPath, logPath, isDefault) => {
 export const buildProject = async (targetPath) => {
   const cmd = spawn('npm', ['run', 'build'], { cwd: targetPath });
   await loadingSpawn(cmd, '构建项目');
+};
+
+export const diffFileO2O = (item, branch) => {
+    const url = `${BASE_PATH}/${branch}/${item.filename}`;
+    const filePath = path.join(process.cwd(), item.filename);
+    return new Promise((resolve, reject) => {
+        if (fs.existsSync(filePath)) {
+            request(url, (err, res, body) => {
+                if (!err && res.statusCode == 200) {
+                    const localCont = fs.readFileSync(filePath, 'UTF-8');
+                    let diffs = require('diff').diffLines(localCont, body),
+                        changed = diffs.some((part) => part.added || part.removed);
+                    resolve(changed ? {
+                        item,
+                        diffs
+                    } : false);
+                } else {
+                    reject({
+                        url: url,
+                        statusCode: res.statusCode
+                    });
+                }
+            });
+        } else {
+            resolve(false);
+        }
+    });
 };
