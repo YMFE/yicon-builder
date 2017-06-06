@@ -24,6 +24,7 @@ CREATE TABLE `icons` (
   `oldId` int(11) DEFAULT NULL,
   `newId` int(11) DEFAULT NULL,
   `uploader` int(11) DEFAULT NULL,
+  `description` varchar(5000) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `uploader` (`uploader`),
   CONSTRAINT `icons_ibfk_1` FOREIGN KEY (`uploader`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE

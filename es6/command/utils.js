@@ -8,6 +8,7 @@ import inquirer from 'inquirer';
 import { spawn } from 'child_process';
 import request from 'request';
 import diff from 'diff';
+import semver from 'semver';
 
 const BASE_PATH = 'https://raw.githubusercontent.com/YMFE/yicon';
 
@@ -144,6 +145,16 @@ export const npmPreInstall = async (targetPath, logPath, isDefault) => {
 
   log.dim(`在 ${targetPath} 路径下执行命令: npm ${params.join(' ')}`);
 
+  // 判断当前项目的版本是否符合 semver 规范，不符合(导致无法正常 install )则暂时修改，当正常 install 完成后再改回来
+  const prevPkgPath = path.join(targetPath, '../.src_prev/package.json');
+  const pkgPath = path.join(targetPath, 'package.json');
+  const pkg = require(prevPkgPath);
+  const { version } = pkg || {};
+  if (version && !semver.valid(version)) {
+      pkg.version = '1.0.0';
+  }
+  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2), 'utf-8');
+
   await new Promise((resolve, reject) => {
     const ls = spawn('npm', params, {
       cwd: targetPath,
@@ -211,7 +222,7 @@ export const diffFileO2O = (item, branch) => {
                 } else {
                     reject({
                         url: url,
-                        statusCode: res.statusCode
+                        statusCode: res && res.statusCode
                     });
                 }
             });
@@ -220,3 +231,17 @@ export const diffFileO2O = (item, branch) => {
         }
     });
 };
+
+export const syncVersion = (targetPath) => {
+  const prevPkgPath = path.join(targetPath, '../.src_prev/package.json');
+  const pkgPath = path.join(targetPath, 'package.json');
+  // 很奇怪，直接 require json 文件一直不对
+  const prevPkg = JSON.parse(fs.readFileSync(prevPkgPath)) || {};
+  const pkg = JSON.parse(fs.readFileSync(pkgPath)) || {};
+  const prevPkgVersion = prevPkg.version;
+  const pkgVersion = pkg.version;
+  if (prevPkgVersion && pkgVersion && prevPkgVersion !== pkgVersion) {
+    pkg.version = prevPkgVersion;
+    fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2), 'utf-8');
+  }
+}

@@ -10,7 +10,8 @@ import {
   wget,
   log,
   npmPreInstall,
-  buildProject
+  buildProject,
+  syncVersion
 } from './utils';
 
 const getConfig = filename => ({
@@ -272,6 +273,7 @@ export default async (args) => {
     await authDBConnection(config, isDefault);
     await npmPreInstall($install('/src'), $install('/install.log'), isDefault);
     await buildProject($install('/src'));
+    syncVersion($install('/src'));
 
     log.done(`项目初始化成功，可以前往 ${$install('/src')} 目录下执行 ./start.sh 以 3000 端口启动服务`);
     process.exit(0);
