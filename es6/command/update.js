@@ -12,7 +12,7 @@ import GitHub from 'github-api';
 
 import { wget, log, npmPreInstall, buildProject, diffFileO2O, loading, syncVersion } from './utils';
 
-const defaultBranch = 'deploy';
+const defaultBranch = 'master';
 
 const TYPE_MAP = {
     unlink: {

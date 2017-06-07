@@ -259,7 +259,7 @@ const getInstallPath = async (isDefault) => {
 
 export default async (args) => {
   try {
-    const { branch = 'deploy' } = args;
+    const { branch = 'master' } = args;
     const isDefault = args && args.default;
     await getInstallPath(isDefault);
     await copySource(branch);
