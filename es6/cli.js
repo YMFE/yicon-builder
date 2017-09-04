@@ -1,5 +1,5 @@
 import program from 'commander';
-import { init, update } from './command';
+import { init, update, run } from './command';
 import pkg from '../package.json';
 
 program.version(pkg.version);
@@ -16,6 +16,13 @@ program
   .command('update')
   .description('更新 yicon 项目，对比差异应用更新')
   .action(update);
+
+program
+  .command('run')
+  .usage('<cmd>')
+  .arguments('cmd')
+  .description('查询、恢复数据等')
+  .action(run);
 
 program.parse(process.argv);
 

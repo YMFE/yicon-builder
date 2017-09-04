@@ -11,6 +11,7 @@ import {
   log,
   npmPreInstall,
   buildProject,
+  getDBConfig,
   syncVersion
 } from './utils';
 
@@ -52,60 +53,6 @@ const copySource = async (branch) => {
   await q.nfcall(exec, `mkdir "${$install('/logs')}"`);
 
   log.done('项目初始化完成');
-};
-
-const getDBConfig = async (config, isDefault) => {
-  if (isDefault) {
-    config.model = {
-      host: '127.0.0.1',
-      username: 'root',
-      password: '123456',
-      port: '3306',
-      database: 'iconfont',
-      dialect: 'mysql'
-    };
-    return config;
-  }
-  log.info('输入数据库配置项，回车接受默认值');
-
-  const questions = [
-    {
-      type: 'input',
-      name: 'host',
-      message: '请输入数据库域名或 IP 地址:',
-      default: '127.0.0.1'
-    },
-    {
-      type: 'input',
-      name: 'username',
-      message: '请输入数据库用户名:',
-      default: 'root'
-    },
-    {
-      type: 'input',
-      name: 'password',
-      message: '请输入数据库密码:',
-      default: '123456'
-    },
-    {
-      type: 'input',
-      name: 'port',
-      message: '请输入数据库端口号:',
-      default: '3306'
-    },
-    {
-      type: 'input',
-      name: 'database',
-      message: '请输入数据库名称:',
-      default: 'iconfont'
-    }
-  ];
-
-  config.model = await inquirer.prompt(questions);
-
-  config.model.dialect = 'mysql';
-
-  return config;
 };
 
 const getLoginConfig = async (config, isDefault) => {
