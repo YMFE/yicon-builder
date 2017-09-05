@@ -29,7 +29,7 @@ function analyzeLog(type, logString) {
 export default async () => {
   // 获取数据库信息
   const config = await getDBConfig({});
-  const { model } = config || {};
+  const model = config && config.model || {};
   const connection = mysql.createConnection({
     host     : model.host,
     user     : model.username,
@@ -40,11 +40,10 @@ export default async () => {
   // 连接数据库
   connection.connect((err) => {
     if (err) {
-      log.error('连接数据库失败！');
-      log.error('error connecting: ' + err.stack);
+      log.error('连接数据库失败！错误信息为: ' + err.message);
       process.exit(1);
     }
-    log.done('Connection has been established successfully.');
+    log.done('成功连接数据库！');
   });
 
   // 查询数据
@@ -152,7 +151,7 @@ export default async () => {
       connection.end();
     })
     .catch((err) => {
-      log.error(err);
+      log.error(err.message);
       connection.end();
       process.exit(1);
     });
