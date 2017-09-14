@@ -1,6 +1,6 @@
 {
   "name": "yicon-builder",
-  "version": "1.0.6",
+  "version": "1.0.6-beta",
   "description": "The builder of yicon",
   "files": [
     "*.md",
@@ -22,7 +22,10 @@
     "watch": "babel es6 -d lib -w",
     "build": "babel es6 -d lib"
   },
-  "author": ["minghao.yu", "changquan.fang"],
+  "author": [
+    "minghao.yu",
+    "changquan.fang"
+  ],
   "license": "ISC",
   "dependencies": {
     "babel-runtime": "^6.11.6",
