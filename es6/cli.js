@@ -21,7 +21,7 @@ program
   .command('run')
   .usage('<cmd>')
   .arguments('cmd')
-  .description('查询、恢复数据等')
+  .description('查询、恢复数据等 \n\n  cmd 参数：\n  recoverUserProjects: 恢复误删的用户项目关联关系表数据')
   .action(run);
 
 program.parse(process.argv);
