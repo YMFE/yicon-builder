@@ -1,5 +1,16 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS `caches`;
+
+CREATE TABLE `caches` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `svg` varchar(10000) NOT NULL,
+  `iconId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `iconId` (`iconId`),
+  CONSTRAINT `caches_ibfk_1` FOREIGN KEY (`iconId`) REFERENCES `icons` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='原始上传图标文件缓存表';
+
 DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
@@ -7,7 +18,7 @@ CREATE TABLE `users` (
   `name` varchar(255) NOT NULL,
   `actor` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户信息表';
 
 DROP TABLE IF EXISTS `icons`;
 
@@ -28,7 +39,7 @@ CREATE TABLE `icons` (
   PRIMARY KEY (`id`),
   KEY `uploader` (`uploader`),
   CONSTRAINT `icons_ibfk_1` FOREIGN KEY (`uploader`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图标表';
 
 DROP TABLE IF EXISTS `repositories`;
 
@@ -46,7 +57,7 @@ CREATE TABLE `repositories` (
   UNIQUE KEY `repositories_alias_unique` (`alias`),
   KEY `admin` (`admin`),
   CONSTRAINT `repositories_ibfk_1` FOREIGN KEY (`admin`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图标大库表';
 
 DROP TABLE IF EXISTS `projects`;
 
@@ -58,12 +69,15 @@ CREATE TABLE `projects` (
   `baseline` tinyint(1) DEFAULT '0',
   `owner` int(11) DEFAULT NULL,
   `source` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `updateAt` datetime DEFAULT NULL,
+  `publicName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `projects_name_unique` (`name`),
   KEY `owner` (`owner`),
   CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图标项目表';
 
 DROP TABLE IF EXISTS `repoVersions`;
 

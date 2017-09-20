@@ -11,6 +11,7 @@ import {
   log,
   npmPreInstall,
   buildProject,
+  getDBConfig,
   syncVersion
 } from './utils';
 
@@ -44,68 +45,22 @@ const $install = p => path.join(dir, p);
 // 将 src 资源文件复制到指定目录
 const copySource = async (branch) => {
   const sourceUrl = `YMFE/yicon#${branch}`;
+  // 兼容低版本 yicon(低版本中没有 template 目录及相关模板文件)
+  const configJsPath = fs.existsSync($install('/src/template/config.js'))
+    ? $install('/src/template/config.js')
+    : $command('../../template/config.js');
+  // 兼容低版本 yicon(低版本中没有 template 目录及相关模板文件)
+  const startShPath = fs.existsSync($install('/src/template/start.sh'))
+    ? $install('/src/template/start.sh')
+    : $command('../../template/start.sh');
   await q.nfcall(exec, `mkdir "${$install('/src')}"`);
   await wget(sourceUrl, $install('/src'));
   await q.nfcall(exec, `cp -r "${$install('/src')}" "${$install('.src_prev')}"`);
-  await q.nfcall(exec, `cp -r "${$command('../../template/config.js')}" "${$install('/src/src')}"`);
-  await q.nfcall(exec, `cp -r "${$command('../../template/start.sh')}" "${$install('/src')}"`);
+  await q.nfcall(exec, `cp -r "${configJsPath}" "${$install('/src/src')}"`);
+  await q.nfcall(exec, `cp -r "${startShPath}" "${$install('/src')}"`);
   await q.nfcall(exec, `mkdir "${$install('/logs')}"`);
 
   log.done('项目初始化完成');
-};
-
-const getDBConfig = async (config, isDefault) => {
-  if (isDefault) {
-    config.model = {
-      host: '127.0.0.1',
-      username: 'root',
-      password: '123456',
-      port: '3306',
-      database: 'iconfont',
-      dialect: 'mysql'
-    };
-    return config;
-  }
-  log.info('输入数据库配置项，回车接受默认值');
-
-  const questions = [
-    {
-      type: 'input',
-      name: 'host',
-      message: '请输入数据库域名或 IP 地址:',
-      default: '127.0.0.1'
-    },
-    {
-      type: 'input',
-      name: 'username',
-      message: '请输入数据库用户名:',
-      default: 'root'
-    },
-    {
-      type: 'input',
-      name: 'password',
-      message: '请输入数据库密码:',
-      default: '123456'
-    },
-    {
-      type: 'input',
-      name: 'port',
-      message: '请输入数据库端口号:',
-      default: '3306'
-    },
-    {
-      type: 'input',
-      name: 'database',
-      message: '请输入数据库名称:',
-      default: 'iconfont'
-    }
-  ];
-
-  config.model = await inquirer.prompt(questions);
-
-  config.model.dialect = 'mysql';
-
-  return config;
 };
 
 const getLoginConfig = async (config, isDefault) => {
@@ -203,12 +158,17 @@ const authDBConnection = async (config, isDefault) => {
 
   if (!initDB) {
     log.dim('如需初始化，请手工导入安装路径根目录下 sql 脚本建表');
-    await q.nfcall(exec, `cp "${$command('../../template/iconfont.sql')}" "${$install('/iconfont.sql')}"`);
+    // 兼容低版本 yicon(低版本中没有 template 目录及相关模板文件)
+    let sqlFile = $install('/src/template/iconfont.sql');
+    sqlFile = fs.existsSync(sqlFile) ? sqlFile : $command('../../template/iconfont.sql');
+    await q.nfcall(exec, `cp "${sqlFile}" "${$install('/iconfont.sql')}"`);
   }
 };
 
 const importDBData = async seq => {
-  const sqlFile = $command('../../template/iconfont.sql');
+  // 兼容低版本 yicon(低版本中没有 template 目录及相关模板文件)
+  let sqlFile = $install('/src/template/iconfont.sql');
+  sqlFile = fs.existsSync(sqlFile) ? sqlFile : $command('../../template/iconfont.sql');
   const content = await q.nfcall(fs.readFile, sqlFile);
   const sqlList = content.toString().split(';')
     .map(sql => sql.replace(/\n/g, ''))

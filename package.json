@@ -1,6 +1,6 @@
 {
   "name": "yicon-builder",
-  "version": "1.0.5",
+  "version": "1.0.6-beta",
   "description": "The builder of yicon",
   "files": [
     "*.md",
@@ -15,14 +15,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.corp.qunar.com:mfe/yicon-builder.git"
+    "url": "git@github.com:YMFE/yicon-builder.git"
   },
   "scripts": {
     "prepublish": "npm run build",
     "watch": "babel es6 -d lib -w",
     "build": "babel es6 -d lib"
   },
-  "author": "minghao.yu",
+  "author": [
+    "minghao.yu",
+    "changquan.fang"
+  ],
   "license": "ISC",
   "dependencies": {
     "babel-runtime": "^6.11.6",
